@@ -55,6 +55,11 @@ export class Cat extends Document {
 
 export const CatSchema = SchemaFactory.createForClass(Cat);
 
+/**
+ * Virtual fields
+ *  실제로 DB에 저장 되진 않지만 사용할 수 있게 만들어진 필드
+ */
+
 CatSchema.virtual('readOnlyData').get(function (this: Cat) {
   return {
     id: this.id,

@@ -1,14 +1,8 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  HttpException,
-  Param,
-  ParseIntPipe,
-  Patch,
   Post,
-  Put,
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,7 +11,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { PositiveIntPipe } from 'src/common/pipes/positiveInt.pipe';
 import { CatsService } from './cats.service';
 import { ReadOnlyCatDto } from './dto/cat.dto';
 import { CatRequestDto } from './dto/cats.request.dto';
@@ -72,3 +65,14 @@ export class CatsController {
     return 'uploadImg';
   }
 }
+
+/**
+ getOneCat(@Param('id', ParseIntPipe) param: number) {
+  console.log(param);
+  return 'one cat';
+}
+// PiPe: 클라이언트 요청에서 들어오는 데이터의 유효성 검사 및 변환을 실행해
+  // 서버가 원하는 데이터를 얻얼 수 있도록 도와주는 클래스
+  // param의 키 값을 id 로 받고, 이를 number 타입으로 변환
+  // + 키 값 id 아닐 시 validation error
+ */

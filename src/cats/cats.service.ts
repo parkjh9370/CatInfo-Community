@@ -15,7 +15,7 @@ export class CatsService {
     const isCatExist = await this.catsRepository.existByEmail(email);
 
     if (isCatExist) {
-      // UnauthorizedException: HttpException 필터로 이동
+      // 403 처리, UnauthorizedException: HttpException 필터로 이동
       throw new UnauthorizedException('해당 아이디는 이미 가입 되었습니다');
     }
 

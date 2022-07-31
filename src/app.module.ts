@@ -10,6 +10,7 @@ import * as mongoose from 'mongoose';
 
 @Module({
   imports: [
+    /// 환경변수 사용
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODB_URI, {
       useNewUrlParser: true,
@@ -25,9 +26,11 @@ import * as mongoose from 'mongoose';
 })
 export class AppModule implements NestModule {
   private readonly isDev: boolean = process.env.MODE === 'dev' ? true : false;
+
+  // LoggerMiddleware(공급자)를 AppModule 소비자에 등록시켜 줌
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
-    mongoose.set('debug', this.isDev);
+    consumer.apply(LoggerMiddleware).forRoutes('*'); // 전체 엔드포인트에 대한 로깅
+    mongoose.set('debug', this.isDev); // 몽구스 데이터 쿼리 (개발 시 출력)
   }
 }
 

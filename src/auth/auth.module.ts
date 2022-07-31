@@ -8,12 +8,12 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
-    // 토근 등록
+    // 토근 발급
     JwtModule.register({
       secret: 'my-scret-key',
       signOptions: { expiresIn: '1y' },
     }),
-
+    // 순환 모듈 참조 문제 해결
     forwardRef(() => CatsModule),
   ],
   providers: [AuthService, JwtStrategy],

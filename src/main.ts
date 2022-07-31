@@ -17,10 +17,11 @@ async function bootstrap() {
     // .addTag('cats')
     .build();
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
-  // Swagger 엔드포인트 지정
+  // Swagger 엔드포인트 지정 (/docs)
   SwaggerModule.setup('docs', app, document);
 
   app.enableCors({
+    // true : 모든 요청 수락, 배포 시 특정 url만 허용할 수 있도록 설정
     origin: true,
     credentials: true,
   });
