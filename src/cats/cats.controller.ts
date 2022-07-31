@@ -1,9 +1,11 @@
+import { JwtAuthGuard } from './../auth/jwt/jwt.guard';
 import {
   Body,
   Controller,
   Get,
   Post,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -14,6 +16,7 @@ import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor'
 import { CatsService } from './cats.service';
 import { ReadOnlyCatDto } from './dto/cat.dto';
 import { CatRequestDto } from './dto/cats.request.dto';
+import { CurrentUser } from 'src/common/decorators/user.decorator';
 
 @Controller('cats')
 // 요청 수행 후 보내주는 응답 형태
@@ -28,9 +31,11 @@ export class CatsController {
   ) {}
 
   @ApiOperation({ summary: '현재 고양이 정보 가져오기' })
+  // Guard (인증) 사용
+  @UseGuards(JwtAuthGuard)
   @Get()
-  getCurrentCat() {
-    return 'current all cat';
+  getCurrentCat(@CurrentUser() cat) {
+    return cat.readOnlyData;
   }
 
   @ApiResponse({
@@ -54,11 +59,12 @@ export class CatsController {
     return this.authService.jwtLogin(data);
   }
 
-  @ApiOperation({ summary: '로그아웃' })
-  @Post('logout')
-  logOut() {
-    return 'logout';
-  }
+  // 프론트엔드에서 jwt를 없애면 로그아웃이 되기 때문에 해당 api는 필요가 없다.
+  // @ApiOperation({ summary: '로그아웃' })
+  // @Post('logout')
+  // logOut() {
+  // return 'logout';
+  // }
 
   @ApiOperation({ summary: '고양이 이미지 업로드' })
   @Post('upload/cats')

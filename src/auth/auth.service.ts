@@ -32,6 +32,7 @@ export class AuthService {
       throw new UnauthorizedException('이메일과 비밀번호를 확인해주세요');
     }
 
+    // jwt payload 정보
     const payload = { email: email, sub: cat.id };
 
     return {
