@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
+  // AppService 의존성 주입
   constructor(private readonly appService: AppService) {}
 
   @Get()

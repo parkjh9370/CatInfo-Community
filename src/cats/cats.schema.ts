@@ -3,12 +3,15 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Document } from 'mongoose';
 
+// createdAt, updatedAt 생성
 const options: SchemaOptions = {
   timestamps: true,
 };
 
+// class 이름 : table 이름
 @Schema(options)
 export class Cat extends Document {
+  // 이메일
   @ApiProperty({
     example: 'testId@gmail.com',
     description: 'email',
@@ -22,6 +25,7 @@ export class Cat extends Document {
   @IsNotEmpty()
   email: string;
 
+  // 이름
   @ApiProperty({
     example: 'Sam',
     description: 'name',
@@ -34,6 +38,7 @@ export class Cat extends Document {
   @IsNotEmpty()
   name: string;
 
+  // 비밀번호
   @ApiProperty({
     example: '23810',
     description: 'password',
@@ -46,6 +51,7 @@ export class Cat extends Document {
   @IsNotEmpty()
   password: string;
 
+  // 이미지
   @Prop()
   @IsString()
   imgUrl: string;

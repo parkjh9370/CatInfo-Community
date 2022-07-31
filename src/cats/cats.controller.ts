@@ -21,6 +21,7 @@ import { CatRequestDto } from './dto/cats.request.dto';
 // 에러 처리 형태
 @UseFilters(HttpExceptionFilter)
 export class CatsController {
+  // CatService, AuthService 의존성 주입
   constructor(
     private readonly catsService: CatsService,
     private readonly authService: AuthService,

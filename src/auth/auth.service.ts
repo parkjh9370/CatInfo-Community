@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
   constructor(
     private readonly catsRepository: CatsRepository,
-    // modlue(JwtModule) 에서 공급자가 있기 때문에 이를 DI 받을 수 있다.
+    // module(JwtModule) 에서 공급자가 있기 때문에 이를 DI 받을 수 있다.
     private jwtService: JwtService,
   ) {}
 

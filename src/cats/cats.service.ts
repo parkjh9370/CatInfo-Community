@@ -1,13 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { Cat } from './cats.schema';
 import { CatRequestDto } from './dto/cats.request.dto';
 import { CatsRepository } from './cats.repository';
 
 @Injectable()
 export class CatsService {
+  // repository (DB 데이터 처리) 의존성 주입
   constructor(private readonly catsRepository: CatsRepository) {}
 
   async signUp(body: CatRequestDto) {
