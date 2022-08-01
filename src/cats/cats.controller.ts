@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -17,6 +18,9 @@ import { CatsService } from './cats.service';
 import { ReadOnlyCatDto } from './dto/cat.dto';
 import { CatRequestDto } from './dto/cats.request.dto';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from 'src/common/utils/multer.options';
+import { Cat } from './cats.schema';
 
 @Controller('cats')
 // 요청 수행 후 보내주는 응답 형태
@@ -67,9 +71,20 @@ export class CatsController {
   // }
 
   @ApiOperation({ summary: '고양이 이미지 업로드' })
-  @Post('upload/cats')
-  uploadCatImg() {
-    return 'uploadImg';
+  // 프론트에서 전송해주는 키 이름으로 인자 설정,
+  // 사진 업로드 갯수 제한
+  // 파일 업로드 조건(upload/cats 라는 폴더에 사진 파일 저장)
+  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('cats')))
+  @UseGuards(JwtAuthGuard)
+  @Post('upload')
+  uploadCatImg(
+    @UploadedFiles() files: Express.Multer.File,
+    // 현재 유저 가져오기
+    @CurrentUser() cat: Cat,
+  ) {
+    // console.log(files);
+    // return { image: `http://localhost:8000/media/cats/${files[0].filename}` };
+    return this.catsService.uploadImg(cat, files);
   }
 }
 

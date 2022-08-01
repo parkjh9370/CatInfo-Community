@@ -4,9 +4,12 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import path from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // express app 제네릭 설정 (useStaticAssets 사용하기 위해)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe()); // class-validation 사용 등록
   app.useGlobalFilters(new HttpExceptionFilter());
 
@@ -20,6 +23,17 @@ async function bootstrap() {
       },
     }),
   );
+
+  // http://localhost:8000/media/cats/aaa.png
+
+  // static 파일 제공
+  // useStaticAssets는 nestApp 에서는 없기 때문에
+  // express application이라고 제네릭 설정을 해줘야 함
+  // common 폴더 안의 uploads
+  app.useStaticAssets(path.join(__dirname, './common', 'uploads'), {
+    // 경로에 media 추가
+    prefix: '/media',
+  });
 
   // Swagger 문서 설정
   const config = new DocumentBuilder()
