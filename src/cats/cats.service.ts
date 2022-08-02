@@ -9,10 +9,17 @@ export class CatsService {
   // repository (DB 데이터 처리) 의존성 주입
   constructor(private readonly catsRepository: CatsRepository) {}
 
+  async getAllCat() {
+    const allCat = await this.catsRepository.findAll();
+    const readOnlyCats = allCat.map((cat) => cat.readOnlyData);
+    return readOnlyCats;
+  }
+
   async uploadImg(cat: Cat, files: Express.Multer.File[]) {
     const fileName = `cats/${files[0].filename}`;
 
     console.log(fileName);
+
     const newCat = await this.catsRepository.findByIdAndUpdateImg(
       cat.id,
       fileName,

@@ -1,4 +1,4 @@
-import { JwtAuthGuard } from './../auth/jwt/jwt.guard';
+import { JwtAuthGuard } from '../../auth/jwt/jwt.guard';
 import {
   Body,
   Controller,
@@ -14,13 +14,13 @@ import { AuthService } from 'src/auth/auth.service';
 import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { CatsService } from './cats.service';
-import { ReadOnlyCatDto } from './dto/cat.dto';
-import { CatRequestDto } from './dto/cats.request.dto';
+import { CatsService } from '../cats.service';
+import { ReadOnlyCatDto } from '../dto/cat.dto';
+import { CatRequestDto } from '../dto/cats.request.dto';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/common/utils/multer.options';
-import { Cat } from './cats.schema';
+import { Cat } from '../cats.schema';
 
 @Controller('cats')
 // 요청 수행 후 보내주는 응답 형태
@@ -78,13 +78,19 @@ export class CatsController {
   @UseGuards(JwtAuthGuard)
   @Post('upload')
   uploadCatImg(
-    @UploadedFiles() files: Express.Multer.File,
+    @UploadedFiles() files: Array<Express.Multer.File>,
     // 현재 유저 가져오기
     @CurrentUser() cat: Cat,
   ) {
     // console.log(files);
     // return { image: `http://localhost:8000/media/cats/${files[0].filename}` };
     return this.catsService.uploadImg(cat, files);
+  }
+
+  @ApiOperation({ summary: '모든 고양이 가져오기' })
+  @Get('all')
+  getAllCat() {
+    return this.catsService.getAllCat();
   }
 }
 
